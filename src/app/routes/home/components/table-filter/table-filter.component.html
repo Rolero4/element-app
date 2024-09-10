@@ -1,1 +1,21 @@
-<p>table-filter works!</p>
+<mat-form-field appearance="outline" class="w-full">
+    <mat-label>Filter value</mat-label>
+    <input
+        #input
+        title="filter"
+        matInput
+        type="text"
+        placeholder="filter value..."
+        [formControl]="filterControl"
+    />
+    @if (input.value) {
+        <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clearInput()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    }
+</mat-form-field>
