@@ -12,9 +12,11 @@ export class ElementStoreService {
         []
     );
 
-    constructor() {}
+    constructor() {
+        this.fetchElements();
+    }
 
-    public fetchElements(): void {
+    private fetchElements(): void {
         this.elementsApi
             .getElements$()
             .pipe(tap((elements) => this.elementsStore$.next(elements)))

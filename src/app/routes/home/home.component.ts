@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { EditPopupComponent } from "../../shared/components/edit-popup/edit-popup.component";
 import { PeriodicElement } from "../../shared/model/misc.model";
+import { ElementStoreService } from "./services/element-store.service";
 
 @Component({
     selector: "app-home",
@@ -11,6 +12,9 @@ import { PeriodicElement } from "../../shared/model/misc.model";
     styleUrl: "./home.component.scss",
 })
 export class HomeComponent {
+    private readonly storeService = inject(ElementStoreService);
+    protected readonly elements$ = this.storeService.elements$;
+
     constructor(public dialog: MatDialog) {
         this.openEditDialog({
             position: 1,
