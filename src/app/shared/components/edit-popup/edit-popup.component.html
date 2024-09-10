@@ -1,0 +1,87 @@
+<h1 mat-dialog-title>Edit Element</h1>
+<form [formGroup]="editForm">
+    <div mat-dialog-content class="flex flex-col gap-y-2">
+        <div class="flex gap-x-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Position</mat-label>
+                <input
+                    title="position"
+                    required
+                    matInput
+                    formControlName="position"
+                    placeholder="position"
+                />
+                <mat-error>
+                    <span>
+                        @if (editForm.controls.position.hasError("min")) {
+                            Position cannot be less than 1
+                        } @else if (
+                            editForm.controls.position.hasError("required")
+                        ) {
+                            This field is required
+                        } @else {
+                            Position must be a number
+                        }
+                    </span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input
+                    title="name"
+                    matInput
+                    required
+                    formControlName="name"
+                    placeholder="name"
+                />
+                <mat-error>
+                    <span>This field is required</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="flex gap-x-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Weight</mat-label>
+                <input
+                    title="weight"
+                    matInput
+                    required
+                    formControlName="weight"
+                    placeholder="weight"
+                />
+                <mat-error>
+                    <span>
+                        @if (editForm.controls.weight.hasError("min")) {
+                            Weight cannot be less than 0
+                        } @else if (
+                            editForm.controls.weight.hasError("required")
+                        ) {
+                            This field is required
+                        } @else {
+                            Weight must be a number
+                        }
+                    </span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Symbol</mat-label>
+                <input
+                    title="symbol"
+                    matInput
+                    required
+                    formControlName="symbol"
+                    placeholder="symbol"
+                />
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+<div mat-dialog-actions>
+    <button mat-stroked-button (click)="onCloseClick()" color="warn">
+        Cancel
+    </button>
+    <button mat-stroked-button (click)="onSaveClick()">Save</button>
+</div>
