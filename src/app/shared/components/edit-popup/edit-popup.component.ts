@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import {
     MAT_DIALOG_DATA,
@@ -30,14 +30,15 @@ import {
     templateUrl: "./edit-popup.component.html",
     styleUrl: "./edit-popup.component.scss",
 })
-export class EditPopupComponent {
-    protected readonly editForm: FormGroup<PeriodicElementFormGroup>;
+export class EditPopupComponent implements OnInit {
+    private readonly dialogRef = inject(MatDialogRef<EditPopupComponent>);
+    private readonly data = inject<PeriodicElement>(MAT_DIALOG_DATA);
 
-    constructor(
-        public dialogRef: MatDialogRef<EditPopupComponent>,
-        @Inject(MAT_DIALOG_DATA) private readonly data: PeriodicElement
-    ) {
-        this.editForm = this.buildForm();
+    protected readonly editForm = this.buildForm();
+
+    constructor() {}
+
+    ngOnInit(): void {
         this.patchForm();
     }
 

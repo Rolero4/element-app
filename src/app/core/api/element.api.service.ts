@@ -19,7 +19,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
     providedIn: "root",
 })
 export class ElementApiService {
-    getElements(): Observable<PeriodicElement[]> {
+    public getElements$(): Observable<PeriodicElement[]> {
         return of(ELEMENT_DATA).pipe(delay(1000));
     }
 }
