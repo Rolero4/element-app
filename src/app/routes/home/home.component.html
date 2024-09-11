@@ -1,2 +1,15 @@
-<app-table-filter class="my-4 w-[300px]"></app-table-filter>
-<app-element-table></app-element-table>
+<app-table-filter
+    (filterValueChanged)="filterValue.set($event)"
+    class="w-[300px]"
+></app-table-filter>
+
+@if (elements$ | async; as elements) {
+    @if (elements.length === 0) {
+        <span> no content</span>
+    } @else {
+        <app-element-table
+            [elements]="elements"
+            [filterValue]="filterValue()"
+        ></app-element-table>
+    }
+}

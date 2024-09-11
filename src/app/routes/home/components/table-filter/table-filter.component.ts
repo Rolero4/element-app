@@ -5,7 +5,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { debounceTime, filter, Observable, tap } from "rxjs";
+import { debounceTime, map, Observable, tap } from "rxjs";
 
 @Component({
     selector: "app-table-filter",
@@ -21,21 +21,21 @@ import { debounceTime, filter, Observable, tap } from "rxjs";
     styleUrl: "./table-filter.component.scss",
 })
 export class TableFilterComponent {
-    private readonly destroyRef = inject(DestroyRef);
+    readonly #destroyRef = inject(DestroyRef);
 
     protected readonly filterValueChanged = output<string>();
     protected readonly filterControl = new FormControl<string>("");
 
     constructor() {
-        this.filterValueChangeOutput$().subscribe();
+        this.#filterValueChangeOutput$().subscribe();
     }
 
-    private filterValueChangeOutput$(): Observable<string> {
+    #filterValueChangeOutput$(): Observable<string> {
         return this.filterControl.valueChanges.pipe(
             debounceTime(2000),
-            filter((value): value is string => !!value),
+            map((value) => (value ? value.trim().toLowerCase() : "")),
             tap((value) => this.filterValueChanged.emit(value)),
-            takeUntilDestroyed(this.destroyRef)
+            takeUntilDestroyed(this.#destroyRef)
         );
     }
 

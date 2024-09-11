@@ -31,18 +31,18 @@ import {
     styleUrl: "./edit-popup.component.scss",
 })
 export class EditPopupComponent implements OnInit {
-    private readonly dialogRef = inject(MatDialogRef<EditPopupComponent>);
-    private readonly data = inject<PeriodicElement>(MAT_DIALOG_DATA);
+    readonly #dialogRef = inject(MatDialogRef<EditPopupComponent>);
+    readonly #data = inject<PeriodicElement>(MAT_DIALOG_DATA);
 
-    protected readonly editForm = this.buildForm();
+    protected readonly editForm = this.#buildForm();
 
     constructor() {}
 
     ngOnInit(): void {
-        this.patchForm();
+        this.#patchForm();
     }
 
-    private buildForm(): FormGroup<PeriodicElementFormGroup> {
+    #buildForm(): FormGroup<PeriodicElementFormGroup> {
         return new FormGroup<PeriodicElementFormGroup>({
             position: new FormControl<number>(1, {
                 nonNullable: true,
@@ -74,15 +74,15 @@ export class EditPopupComponent implements OnInit {
         });
     }
 
-    private patchForm(): void {
-        this.editForm.patchValue(this.data);
+    #patchForm(): void {
+        this.editForm.patchValue(this.#data);
     }
 
     protected onCloseClick(): void {
-        this.dialogRef.close(false);
+        this.#dialogRef.close(false);
     }
 
     protected onSaveClick(): void {
-        this.dialogRef.close(this.editForm.getRawValue());
+        this.#dialogRef.close(this.editForm.getRawValue());
     }
 }
