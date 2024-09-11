@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, finalize, Observable, tap } from "rxjs";
 import { ElementApiService } from "../../../core/api/element.api.service";
 import { PeriodicElement } from "../../../shared/model/misc.model";
 
@@ -9,6 +9,7 @@ import { PeriodicElement } from "../../../shared/model/misc.model";
 export class ElementStoreService {
     readonly #elementsApi = inject(ElementApiService);
     readonly #elementsStore$ = new BehaviorSubject<PeriodicElement[]>([]);
+    readonly #isElementsLoadingStore$ = new BehaviorSubject<boolean>(false);
 
     constructor() {
         this.#fetchElements();
@@ -26,10 +27,18 @@ export class ElementStoreService {
         return this.#elementsStore$.asObservable();
     }
 
+    public get isLoadingElements$(): Observable<boolean> {
+        return this.#isElementsLoadingStore$.asObservable();
+    }
+
     #fetchElements(): void {
+        this.#isElementsLoadingStore$.next(true);
         this.#elementsApi
             .getElements$()
-            .pipe(tap((elements) => this.#elementsStore$.next(elements)))
+            .pipe(
+                tap((elements) => this.#elementsStore$.next(elements)),
+                finalize(() => this.#isElementsLoadingStore$.next(false))
+            )
             .subscribe();
     }
 }

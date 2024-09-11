@@ -1,0 +1,33 @@
+:host {
+    @apply block;
+
+    .custom-table {
+        @apply w-full border-collapse border shadow-2xl;
+
+        th {
+            @apply px-4 py-2 text-left;
+        }
+
+        td {
+            @apply px-4 py-2;
+        }
+
+        tr {
+            @apply transition bg-gray-100 hover:bg-gray-200  border-b border-gray-400;
+        }
+
+        .mini-cell {
+            @apply w-[5%];
+        }
+
+        .mat-cell,
+        .mat-header-cell {
+            padding: 16px;
+            font-size: 14px;
+        }
+
+        .mat-no-data {
+            @apply text-center  text-gray-500 italic;
+        }
+    }
+}
