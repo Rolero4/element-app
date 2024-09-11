@@ -14,14 +14,22 @@ export class ElementStoreService {
         this.#fetchElements();
     }
 
+    public set elements(elements: PeriodicElement[]) {
+        this.#elementsStore$.next(elements);
+    }
+
+    public get elements(): PeriodicElement[] {
+        return [...this.#elementsStore$.value];
+    }
+
+    public get elements$(): Observable<PeriodicElement[]> {
+        return this.#elementsStore$.asObservable();
+    }
+
     #fetchElements(): void {
         this.#elementsApi
             .getElements$()
             .pipe(tap((elements) => this.#elementsStore$.next(elements)))
             .subscribe();
-    }
-
-    public get elements$(): Observable<PeriodicElement[]> {
-        return this.#elementsStore$.asObservable();
     }
 }

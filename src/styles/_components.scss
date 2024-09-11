@@ -1,7 +1,12 @@
 .mdc-notched-outline__notch {
     border: 0;
 }
-
-.mat-mdc-dialog-container .mdc-dialog__surface {
-    padding: 0 !important;
+.cdk-overlay-backdrop {
+    overflow: auto;
+}
+.cdk-overlay-dark-backdrop {
+    overflow: auto;
+}
+.cdk-overlay-backdrop-showing {
+    overflow: auto;
 }

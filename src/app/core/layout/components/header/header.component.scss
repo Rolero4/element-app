@@ -1,7 +1,7 @@
 :host {
-    @apply flex items-center justify-center;
+    @apply top-0 flex items-center justify-center z-10;
 
     .header {
-        @apply bg-green-900 text-white text-center sticky top-0 w-full pt-4;
+        @apply bg-green-900 text-white text-center  w-full pt-4;
     }
 }

@@ -1,8 +1,9 @@
-import { Component, computed, effect, input } from "@angular/core";
+import { Component, computed, effect, inject, input } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { PeriodicElement } from "../../../../shared/model/misc.model";
+import { ElementEditService } from "../../services/element-edit.service";
+import { PeriodicElement } from "./../../../../shared/model/misc.model";
 
 @Component({
     selector: "app-element-table",
@@ -12,6 +13,8 @@ import { PeriodicElement } from "../../../../shared/model/misc.model";
     styleUrl: "./element-table.component.scss",
 })
 export class ElementTableComponent {
+    readonly #elementEdit = inject(ElementEditService);
+
     public readonly filterValue = input.required<string>();
     public readonly elements = input.required<PeriodicElement[]>();
 
@@ -33,7 +36,7 @@ export class ElementTableComponent {
         });
     }
 
-    protected openEditDialog(index: number): void {
-        console.log(index);
+    protected openEditDialog(element: PeriodicElement, index: number): void {
+        this.#elementEdit.openEditPopup(element, index);
     }
 }
