@@ -20,6 +20,10 @@
             @apply w-[5%];
         }
 
+        .standard-cell {
+            @apply w-[30%];
+        }
+
         .mat-cell,
         .mat-header-cell {
             padding: 16px;
