@@ -44,11 +44,7 @@ export class EditPopupComponent {
         return new FormGroup<PeriodicElementFormGroup>({
             position: new FormControl<number>(1, {
                 nonNullable: true,
-                validators: [
-                    Validators.required,
-                    Validators.pattern("^[0-9]*$"),
-                    Validators.min(1),
-                ],
+                validators: [Validators.required, Validators.min(1)],
             }),
 
             name: new FormControl<string>("", {
@@ -58,11 +54,7 @@ export class EditPopupComponent {
 
             weight: new FormControl<number>(0, {
                 nonNullable: true,
-                validators: [
-                    Validators.required,
-                    Validators.pattern("^[0-9.-/]+$"),
-                    Validators.min(0),
-                ],
+                validators: [Validators.required, Validators.min(0)],
             }),
 
             symbol: new FormControl<string>("", {

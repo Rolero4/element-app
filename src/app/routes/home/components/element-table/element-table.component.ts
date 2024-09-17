@@ -2,6 +2,8 @@ import { Component, computed, effect, inject, input } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
+import { rxActions } from "@rx-angular/state/actions";
+import { exhaustMap } from "rxjs";
 import { ElementEditService } from "../../services/element-edit.service";
 import { PeriodicElement } from "./../../../../shared/model/misc.model";
 
@@ -18,6 +20,26 @@ export class ElementTableComponent {
     public readonly filterValue = input.required<string>();
     public readonly elements = input.required<PeriodicElement[]>();
 
+    protected readonly actions = rxActions<{
+        openPopup: { element: PeriodicElement; index: number };
+    }>();
+
+    private readonly openPopupEffect = this.actions.onOpenPopup((data$) =>
+        data$.pipe(
+            exhaustMap(({ element, index }) =>
+                this.#elementEdit.openEditPopup$(element, index)
+            )
+        )
+    );
+
+    private readonly filterEffect = effect(() => {
+        this.dataSource().filter = this.filterValue();
+    });
+
+    protected readonly dataSource = computed(
+        () => new MatTableDataSource<PeriodicElement>(this.elements())
+    );
+
     protected readonly displayedColumns: string[] = [
         "position",
         "name",
@@ -25,18 +47,4 @@ export class ElementTableComponent {
         "symbol",
         "edit",
     ];
-
-    protected readonly dataSource = computed(
-        () => new MatTableDataSource<PeriodicElement>(this.elements())
-    );
-
-    constructor() {
-        effect(() => {
-            this.dataSource().filter = this.filterValue();
-        });
-    }
-
-    protected openEditDialog(element: PeriodicElement, index: number): void {
-        this.#elementEdit.openEditPopup(element, index);
-    }
 }

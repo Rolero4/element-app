@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { filter, tap } from "rxjs";
+import { filter, Observable, tap } from "rxjs";
 import { EditPopupComponent } from "../../../shared/components/edit-popup/edit-popup.component";
 import { PeriodicElement } from "../../../shared/model/misc.model";
 import { ElementStoreService } from "./element-store.service";
@@ -12,24 +12,22 @@ export class ElementEditService {
     readonly #elementStore = inject(ElementStoreService);
     readonly #dialog = inject(MatDialog);
 
-    constructor() {}
-
-    public openEditPopup(element: PeriodicElement, index: number): void {
+    public openEditPopup$(
+        element: PeriodicElement,
+        index: number
+    ): Observable<PeriodicElement> {
         const dialogRef = this.#dialog.open(EditPopupComponent, {
             data: { ...element },
             disableClose: true,
         });
 
-        dialogRef
-            .afterClosed()
-            .pipe(
-                filter(
-                    (value: PeriodicElement | null): value is PeriodicElement =>
-                        !!value
-                ),
-                tap((value) => this.#editRecord(value, index))
-            )
-            .subscribe();
+        return dialogRef.afterClosed().pipe(
+            filter(
+                (value: PeriodicElement | null): value is PeriodicElement =>
+                    !!value
+            ),
+            tap((value) => this.#editRecord(value, index))
+        );
     }
 
     #editRecord(record: PeriodicElement, index: number): void {

@@ -34,7 +34,15 @@
             *matCellDef="let element; let index = index"
             class="mini-cell"
         >
-            <button mat-icon-button (click)="openEditDialog(element, index)">
+            <button
+                mat-icon-button
+                (click)="
+                    actions.openPopup({
+                        element,
+                        index,
+                    })
+                "
+            >
                 <mat-icon>edit</mat-icon>
             </button>
         </td>

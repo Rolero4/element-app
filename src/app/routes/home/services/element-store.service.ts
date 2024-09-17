@@ -19,7 +19,7 @@ export class ElementStoreService {
     });
 
     public set elements(elements: PeriodicElement[]) {
-        this.#stateStore$.set({ elements });
+        this.#stateStore$.set({ elements: [...elements] });
     }
 
     public get elements(): PeriodicElement[] {

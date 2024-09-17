@@ -19,8 +19,10 @@ import { ElementStoreService } from "./services/element-store.service";
 })
 export class HomeComponent {
     readonly #storeService = inject(ElementStoreService);
+
     protected readonly elements$ = this.#storeService.elements$;
     protected readonly isElementsLoading$ =
         this.#storeService.isLoadingElements$;
+
     protected readonly filterValue = signal<string>("");
 }
