@@ -1,5 +1,6 @@
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, finalize, Observable, tap } from "rxjs";
+import { rxState } from "@rx-angular/state";
+import { finalize, Observable, tap } from "rxjs";
 import { ElementApiService } from "../../../core/api/element.api.service";
 import { PeriodicElement } from "../../../shared/model/misc.model";
 
@@ -8,37 +9,35 @@ import { PeriodicElement } from "../../../shared/model/misc.model";
 })
 export class ElementStoreService {
     readonly #elementsApi = inject(ElementApiService);
-    readonly #elementsStore$ = new BehaviorSubject<PeriodicElement[]>([]);
-    readonly #isElementsLoadingStore$ = new BehaviorSubject<boolean>(false);
 
-    constructor() {
-        this.#fetchElements();
-    }
+    readonly #stateStore$ = rxState<{
+        elements: PeriodicElement[];
+        isLoading: boolean;
+    }>(({ set, connect }) => {
+        set({ elements: [], isLoading: true });
+        connect("elements", this.#fetchElements$());
+    });
 
     public set elements(elements: PeriodicElement[]) {
-        this.#elementsStore$.next(elements);
+        this.#stateStore$.set({ elements });
     }
 
     public get elements(): PeriodicElement[] {
-        return [...this.#elementsStore$.value];
+        return this.#stateStore$.get("elements");
     }
 
     public get elements$(): Observable<PeriodicElement[]> {
-        return this.#elementsStore$.asObservable();
+        return this.#stateStore$.select("elements");
     }
 
     public get isLoadingElements$(): Observable<boolean> {
-        return this.#isElementsLoadingStore$.asObservable();
+        return this.#stateStore$.select("isLoading");
     }
 
-    #fetchElements(): void {
-        this.#isElementsLoadingStore$.next(true);
-        this.#elementsApi
-            .getElements$()
-            .pipe(
-                tap((elements) => this.#elementsStore$.next(elements)),
-                finalize(() => this.#isElementsLoadingStore$.next(false))
-            )
-            .subscribe();
+    #fetchElements$(): Observable<PeriodicElement[]> {
+        return this.#elementsApi.getElements$().pipe(
+            tap((elements) => this.#stateStore$.set({ elements })),
+            finalize(() => this.#stateStore$.set({ isLoading: false }))
+        );
     }
 }
