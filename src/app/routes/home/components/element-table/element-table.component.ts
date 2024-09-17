@@ -21,13 +21,13 @@ export class ElementTableComponent {
     public readonly elements = input.required<PeriodicElement[]>();
 
     protected readonly actions = rxActions<{
-        openPopup: { element: PeriodicElement; index: number };
+        openPopup: { element: PeriodicElement };
     }>();
 
     private readonly openPopupEffect = this.actions.onOpenPopup((data$) =>
         data$.pipe(
-            exhaustMap(({ element, index }) =>
-                this.#elementEdit.openEditPopup$(element, index)
+            exhaustMap(({ element }) =>
+                this.#elementEdit.openEditPopup$(element)
             )
         )
     );

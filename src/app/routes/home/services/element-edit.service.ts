@@ -13,8 +13,7 @@ export class ElementEditService {
     readonly #dialog = inject(MatDialog);
 
     public openEditPopup$(
-        element: PeriodicElement,
-        index: number
+        element: PeriodicElement
     ): Observable<PeriodicElement> {
         const dialogRef = this.#dialog.open(EditPopupComponent, {
             data: { ...element },
@@ -26,13 +25,19 @@ export class ElementEditService {
                 (value: PeriodicElement | null): value is PeriodicElement =>
                     !!value
             ),
-            tap((value) => this.#editRecord(value, index))
+            tap((value) => this.#editRecord(value))
         );
     }
 
-    #editRecord(record: PeriodicElement, index: number): void {
+    #editRecord(record: PeriodicElement): void {
+        const indexOfOriginalElement = this.#elementStore.elements.findIndex(
+            (element) => element.position === record.position
+        );
+
+        if (indexOfOriginalElement === -1) return;
+
         const updatedArray = this.#elementStore.elements;
-        updatedArray[index] = record;
+        updatedArray[indexOfOriginalElement] = record;
         this.#elementStore.elements = updatedArray;
     }
 }

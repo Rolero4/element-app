@@ -8,7 +8,6 @@ export interface PeriodicElement {
 }
 
 export interface PeriodicElementFormGroup {
-    position: FormControl<number>;
     name: FormControl<string>;
     weight: FormControl<number>;
     symbol: FormControl<string>;

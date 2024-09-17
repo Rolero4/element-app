@@ -23,7 +23,7 @@ export class ElementStoreService {
     }
 
     public get elements(): PeriodicElement[] {
-        return this.#stateStore$.get("elements");
+        return [...this.#stateStore$.get("elements")];
     }
 
     public get elements$(): Observable<PeriodicElement[]> {

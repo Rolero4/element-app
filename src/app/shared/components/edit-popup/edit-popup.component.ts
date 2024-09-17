@@ -42,11 +42,6 @@ export class EditPopupComponent {
 
     #buildForm(): FormGroup<PeriodicElementFormGroup> {
         return new FormGroup<PeriodicElementFormGroup>({
-            position: new FormControl<number>(1, {
-                nonNullable: true,
-                validators: [Validators.required, Validators.min(1)],
-            }),
-
             name: new FormControl<string>("", {
                 nonNullable: true,
                 validators: [Validators.required],
@@ -73,6 +68,9 @@ export class EditPopupComponent {
     }
 
     protected onSaveClick(): void {
-        this.#dialogRef.close(this.editForm.getRawValue());
+        this.#dialogRef.close({
+            position: this.#data.position,
+            ...this.editForm.getRawValue(),
+        });
     }
 }
